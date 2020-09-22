@@ -1,14 +1,14 @@
 #include <iostream>
 using namespace std;
-template<typename T, size_t n>
 
-void print_array(T const(& arr)[n])
+template<typename T, size_t n>
+void print_array(T const(&arr)[n])
 {
-    for (size_t i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
-        std::cout << arr[i] << ' ';
+        cout << arr[i] << ' ';
     }
-    std::cout << '\n';
+    cout << '\n';
 }
 
 int main() {

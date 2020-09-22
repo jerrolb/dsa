@@ -93,6 +93,8 @@ int main()
     stack pt(3);
     pt.push(1);
     pt.push(2);
+    pt.push(3);
+    pt.push(4);
     pt.pop();
     pt.pop();
     pt.push(3);
