@@ -29,6 +29,23 @@ struct node* minValueNode(struct node *root) {
     return current;
 }
 
+bool search(struct node* root, int value)
+{
+    while (root != NULL) {
+        if (value > root->value)
+            root = root->right;
+        else if (value < root->value)
+            root = root->left;
+        else
+        {
+            cout << value << " found" << endl;
+            return true;
+        }
+    }
+    cout << value << " not found" << endl;
+    return false;
+}
+
 struct node* insert(struct node *root, int value)
 {
     if (!root) {
@@ -141,10 +158,13 @@ int main()
     }
 
     log(root);
-    deleteNode(root, 5);
-    log(root);
     deleteNode(root, 4);
     log(root);
+
+    cout << search(root, 5) << endl;
+    cout << search(root, 7) << endl;
+    cout << search(root, 100) << endl;
+    cout << search(root, -100) << endl;
 
     return 0;
 };
