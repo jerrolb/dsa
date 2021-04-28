@@ -1,83 +1,72 @@
-#include <bits/stdc++.h>
+#include <unordered_map>
+#include <iostream>
 using namespace std;
 
-const int ALPHABET_SIZE = 26;
+class Trie {
+private:
+    struct trieNode {
+        unordered_map<char, trieNode*> map;
+        bool isEndOfWord = false;
+    };
+    trieNode* root = new trieNode;
 
-struct foo
-{
-    bool bar;
+public:
+    void insert(string word) {
+        trieNode* ref = root;
+
+        for (char c : word) {
+            if (!ref->map[c])
+                ref->map[c] = new trieNode;
+            
+            ref = ref->map[c];
+        }
+            
+        ref->isEndOfWord = true;
+    }
+    
+    bool search(string word) {
+        trieNode* ref = root;
+
+        for (char c : word) {
+            if (!ref->map[c])
+                return false;
+            
+            ref = ref->map[c];
+        }
+        
+        return ref->isEndOfWord;
+    }
+    
+    bool startsWith(string prefix) {
+        trieNode* ref = root;
+
+        for (char c : prefix) {
+            if (!ref->map[c])
+                return false;
+            
+            ref = ref->map[c];
+        }
+        
+        return true;
+    }
 };
 
-struct TrieNode
-{
-    struct TrieNode *children[ALPHABET_SIZE];
+int main() {
+    Trie trie;
+    trie.insert("foo");
+    trie.insert("bar");
+    trie.insert("baz");
 
-    // isEndOfWord is true if the node represents end of a word
-    bool isEndOfWord;
+    cout << trie.search("foo") << endl;
+    cout << trie.search("bar") << endl;
+    cout << trie.search("baz") << endl;
+
+    cout << trie.search("fo") << endl;
+    cout << trie.search("ba") << endl;
+    cout << trie.search("bats") << endl;
+
+    cout << trie.startsWith("f") << endl;
+    cout << trie.startsWith("fo") << endl;
+    cout << trie.startsWith("foo") << endl;
+    cout << trie.startsWith("food") << endl;
 };
-
-// Returns new trie node (initialized to NULLs)
-struct TrieNode *getNode(void)
-{
-    struct TrieNode *pNode =  new TrieNode;
-
-    pNode->isEndOfWord = false;
-
-    for (int i = 0; i < ALPHABET_SIZE; i++)
-        pNode->children[i] = NULL;
-
-    return pNode;
-}
-
-// If not present, inserts key into trie
-// If the key is prefix of trie node, just
-// marks leaf node
-void insert(struct TrieNode *root, string key)
-{
-    struct TrieNode *pCrawl = root;
-
-    for (int i = 0; i < key.length(); i++)
-    {
-        int index = key[i] - 'a';
-        if (!pCrawl->children[index])
-            pCrawl->children[index] = getNode();
-
-        pCrawl = pCrawl->children[index];
-    }
-
-    // mark last node as leaf
-    pCrawl->isEndOfWord = true;
-}
-
-bool search(struct TrieNode *root, string key)
-{
-    struct TrieNode *pCrawl = root;
-
-    for (int i = 0; i < key.length(); i++)
-    {
-        int index = key[i] - 'a';
-        if (!pCrawl->children[index])
-            return false;
-
-        pCrawl = pCrawl->children[index];
-    }
-
-    return (pCrawl != NULL && pCrawl->isEndOfWord);
-}
-
-int main()
-{
-    // Input keys (use only 'a' through 'z' and lower case
-    string keys[] = {"the", "a", "there", "for", "any", "by", "bye", "their" };
-    int length = sizeof(keys)/sizeof(keys[0]);
-
-    struct TrieNode *root = getNode();
-
-    for (int i = 0; i < length; i++)
-        insert(root, keys[i]);
-
-    search(root, "the") ? cout << "Yes\n" : cout << "No\n";
-    search(root, "th") ? cout << "Yes\n" : cout << "No\n";
-    search(root, "these") ? cout << "Yes\n" : cout << "No\n";
-    return 0;
-}
